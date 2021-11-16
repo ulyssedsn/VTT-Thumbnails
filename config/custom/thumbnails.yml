@@ -1,0 +1,6 @@
+common: &common
+  accepted_format:
+    - .mp4
+  image_per_sec: 5
+  nb_rows: 5
+  nb_columns: 5
