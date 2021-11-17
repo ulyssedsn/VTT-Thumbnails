@@ -62,8 +62,8 @@ class Ffmpeg
     "ffmpeg -y -skip_frame nokey -i #{file_path} -vf \"select=" \
     "'between(t,#{start_time},#{trim})'," \
     "setpts=#{media_info.framerate.to_i * IMAGE_PER_SEC}," \
-    "scale=#{SCALE_WIDTH}:#{SCALE_HEIGHT},tile=#{NB_COLUMNS}x#{NB_ROWS}\" -frames:v 1 -qscale:v 3 " \
-    "-an #{output_path.first}/mosaic_#{start_time}.jpg"
+    "scale=#{SCALE_WIDTH}:#{SCALE_HEIGHT},tile=#{NB_COLUMNS}x#{NB_ROWS}\" " \
+    "-frames:v 1 -qscale:v 3 -an #{output_path.first}/mosaic_#{start_time}.jpg"
   end
 end
 

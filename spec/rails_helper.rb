@@ -1,3 +1,13 @@
+# frozen_string_literal: true
+
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter %w(spec config integration log public)
+end
+
+# Previous content of test helper now starts here
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -21,6 +31,11 @@ require 'rspec/rails'
 # require only the support files necessary.
 #
 # Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+#
+%w(spec/shared_contexts/**/*.rb spec/shared_examples/**/*.rb
+   spec/support/**/*.rb).each do |path|
+  Dir[Rails.root.join(path)].each { |file| require file }
+end
 
 RSpec.configure do |config|
   # Remove this line to enable support for ActiveRecord
