@@ -21,6 +21,9 @@ bundle install
 ```ruby
 Thumbnails.new(<mp4_file>).call
 ```
+## WIP
+ - Improve video formats support
+ - Integrate a test player
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
