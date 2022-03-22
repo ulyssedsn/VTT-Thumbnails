@@ -4,7 +4,7 @@
 # VTT-Thumbnails
 
 I love thumbnails, and I think that everybody needs thumbnails in his life. I have built 
-for you a application that is able to generate from an mp4 file VTT Thumbnails (this
+for you an application that is able to generate giving a mp4 file, VTT Thumbnails (this
 include the mosaic and the webvtt file). Enjoy !
 
 ## Installation
