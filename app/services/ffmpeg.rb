@@ -4,7 +4,7 @@ class Ffmpeg
   attr_reader :file_path, :media_info, :output_path, :opts
 
   ACCEPTED_FORMATS = %w(.mp4).freeze
-  IMAGE_PER_SEC = 5
+  IMAGE_PER_SEC = 15
   NB_ROWS = 15
   NB_COLUMNS = 15
   SCALE_WIDTH = 128
@@ -25,7 +25,7 @@ class Ffmpeg
   private
 
   def check_input
-    return if ACCEPTED_FORMATS.include? File.extname(file_path)
+    return if ACCEPTED_FORMATS.include?(File.extname(file_path)) || file_path.starts_with?('http')
 
     fail 'not valid input file format'
   end
@@ -42,8 +42,11 @@ class Ffmpeg
 
     while nb_proceed_mosaic != nb_mosaic_needed
       t = t > media_info.duration / 1_000 ? media_info.duration / 1_000 : t
-
+      p Time.now
+      p command(ss, t).to_s
       system command(ss, t).to_s
+      p Time.now
+
       nb_proceed_mosaic += 1
       ss = t
       t += total_duration_per_mosaic
@@ -59,11 +62,10 @@ class Ffmpeg
   end
 
   def command(start_time, trim)
-    "ffmpeg -y -skip_frame nokey -i #{file_path} -vf \"select=" \
-    "'between(t,#{start_time},#{trim})'," \
-    "setpts=#{media_info.framerate.to_i * IMAGE_PER_SEC}," \
+    "ffmpeg -y -i \"#{file_path}\" -vf \"select=" \
+    "'between(t\\,#{start_time*media_info.framerate.to_i}\\,#{trim})*" \
+    "not(mod(n\\, #{media_info.framerate.to_i * IMAGE_PER_SEC}))'," \
     "scale=#{SCALE_WIDTH}:#{SCALE_HEIGHT},tile=#{NB_COLUMNS}x#{NB_ROWS}\" " \
     "-frames:v 1 -qscale:v 3 -an #{output_path.first}/mosaic_#{start_time}.jpg"
   end
 end
-
