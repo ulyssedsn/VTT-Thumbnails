@@ -14,6 +14,7 @@ dependencies.
 
 ```bash
 bundle install
+bundle exec rails c
 ```
 
 ## Usage
