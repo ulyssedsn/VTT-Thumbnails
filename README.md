@@ -7,6 +7,12 @@ I love thumbnails, and I think that everybody needs thumbnails in his life. I ha
 for you an application that is able to generate giving a mp4 file, VTT Thumbnails (this
 include the mosaic and the webvtt file). Enjoy !
 
+## Requisites
+Ffmpeg - Mediainfo
+
+Ffmpeg: https://www.ffmpeg.org/download.html
+
+Mediainfo: https://www.howtoinstall.me/ubuntu/18-04/mediainfo/
 ## Installation
 
 Use the package manager [bundler](https://bundler.io/) to install all
