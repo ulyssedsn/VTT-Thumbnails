@@ -12,7 +12,7 @@ class WebvttGenerator
 
   def initialize(mosaics_folder)
     @directory = mosaics_folder
-    @mosaics = Dir["#{directory}/*jpg"].sort
+    @mosaics = Dir["#{directory}/*webp"].sort
   end
 
   def call
