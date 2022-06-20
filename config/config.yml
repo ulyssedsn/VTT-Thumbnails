@@ -1,0 +1,16 @@
+common: &common
+  accepted_format: '.mp4'
+  image_per_sec: 15
+  nb_rows: 8
+  nb_columns: 6
+  scale_width: 320
+  scale_height: 180
+
+development:
+  <<: *common
+
+test:
+  <<: *common
+
+production:
+  <<: *common

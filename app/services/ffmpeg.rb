@@ -3,18 +3,12 @@
 class Ffmpeg
   attr_reader :file_path, :media_info, :output_path, :opts
 
-  ACCEPTED_FORMATS = %w(.mp4).freeze
-  IMAGE_PER_SEC = 15
-  NB_ROWS = 15
-  NB_COLUMNS = 15
-  SCALE_WIDTH = 128
-  SCALE_HEIGHT = 72
-
   def initialize(file_path, opts = {})
     @file_path = file_path
     @media_info = MediaInfo.from(file_path).video
     @opts = opts
     @output_path = setup_output_dir
+    @config = Rails.configuration.config
   end
 
   def call
@@ -52,19 +46,20 @@ class Ffmpeg
       t += total_duration_per_mosaic
     end
 
-    output_path.first
+    [output_path.first, @media_info]
   end
 
   def mosaic_values
-    total_duration_per_mosaic = NB_COLUMNS * NB_ROWS * IMAGE_PER_SEC
+    total_duration_per_mosaic = @config[:nb_columns] * @config[:nb_rows] * @config[:image_per_sec]
     nb_mosaic_needed = ((media_info.duration / 1000.0) / total_duration_per_mosaic).ceil
     [total_duration_per_mosaic, nb_mosaic_needed]
   end
 
   def command(start_time, trim)
-    "ffmpeg -y -ss #{start_time} -t #{trim} -i \"#{file_path}\" -vf \"select=" \
-    "not(mod(n\\,#{media_info.framerate.to_i * IMAGE_PER_SEC}))," \
-    "scale=#{SCALE_WIDTH}:#{SCALE_HEIGHT},tile=#{NB_COLUMNS}x#{NB_ROWS}\" " \
-    "-frames 1 -q:v 15 -an #{output_path.first}/mosaic_#{start_time}.webp"
+    "ffmpeg  -analyzeduration 100000000 -probesize 100000000 -hide_banner -loglevel error " \
+    "-y -ss #{start_time} -t #{trim} -i \"#{file_path}\" -vf \"select=" \
+    "not(mod(n\\,#{media_info.framerate.to_i * @config[:image_per_sec]}))," \
+    "scale=#{@config[:scale_width]}:-1,tile=#{@config[:nb_columns]}x#{@config[:nb_rows]}\" " \
+    "-frames 1 -q:v 60 -an #{output_path.first}/mosaic_#{start_time}.webp"
   end
 end
