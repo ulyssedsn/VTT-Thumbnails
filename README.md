@@ -27,6 +27,7 @@ bundle exec rails c
 
 ```ruby
 Thumbnails.new(<mp4_file>).call
+Thumbnails.new(<mp4_url>).call
 ```
 ## WIP
  - Improve video formats support
