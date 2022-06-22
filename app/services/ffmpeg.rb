@@ -59,6 +59,6 @@ class Ffmpeg
     "-y -ss #{start_time} -t #{trim} -i \"#{file_path}\" -vf \"select=" \
     "not(mod(n\\,#{media_info.framerate.to_i * @config[:image_per_sec]}))," \
     "scale=#{@config[:scale_width]}:-1,tile=#{@config[:nb_columns]}x#{@config[:nb_rows]}\" " \
-    "-frames 1 -q:v 60 -an #{output_path.first}/mosaic_#{start_time}.webp"
+    "-frames 1 -q:v 10 -an #{output_path.first}/mosaic_#{start_time}.jpeg"
   end
 end
