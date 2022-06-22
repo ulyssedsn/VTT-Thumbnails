@@ -19,7 +19,7 @@ class Ffmpeg
   private
 
   def check_input
-    return if ACCEPTED_FORMATS.include?(File.extname(file_path)) || file_path.starts_with?('http')
+    return if @config[:accepted_format].include?(File.extname(file_path)) || file_path.starts_with?('http')
 
     fail 'not valid input file format'
   end
@@ -42,8 +42,7 @@ class Ffmpeg
       p Time.now
 
       nb_proceed_mosaic += 1
-      ss = t
-      t += total_duration_per_mosaic
+      ss += t
     end
 
     [output_path.first, @media_info]
