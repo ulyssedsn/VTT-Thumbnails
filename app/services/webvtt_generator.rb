@@ -6,7 +6,7 @@ class WebvttGenerator
 
   def initialize(mosaics_folder, video_mediainfo)
     @directory = mosaics_folder
-    @mosaics = Dir["#{directory}/*webp"].sort_by{ |f| File.mtime(f) }
+    @mosaics = Dir["#{directory}/*jpeg"].sort_by{ |f| File.mtime(f) }
     @config = Rails.configuration.config
     @total_duration_per_mosaic = @config[:nb_columns] * @config[:nb_rows] * @config[:image_per_sec]
     @scale_height = (@config[:scale_width] / (video_mediainfo.width/video_mediainfo.height.to_f)).floor
@@ -57,9 +57,9 @@ class WebvttGenerator
   end
 
   def seconds_to_timecode(seconds)
-    [seconds / 3600, seconds / 60 % 60, seconds % 60].map do |t|
+    [(seconds / 3600).floor, (seconds / 60 % 60).floor, (seconds % 60).floor].map do |t|
       t.to_s.rjust(2, '0')
-    end.join(':')
+    end.join(':') +("%.3f" % (seconds-seconds.to_i))
   end
 
   def write_text(value, path, opts = '')
