@@ -58,7 +58,23 @@ class Ffmpeg
     "ffmpeg  -analyzeduration 100000000 -probesize 100000000 -hide_banner -loglevel error " \
     "-y -ss #{start_time} -t #{trim} -i \"#{file_path}\" -vf \"select=" \
     "not(mod(n\\,#{media_info.framerate.to_i * @config[:image_per_sec]}))," \
-    "scale=#{@config[:scale_width]}:-1,tile=#{@config[:nb_columns]}x#{@config[:nb_rows]}\" " \
-    "-frames 1 -q:v 10 -an #{output_path.first}/mosaic_#{start_time}.jpeg"
+    "scale=#{@config[:scale_width]}:-1,tile=#{@config[:nb_columns]}x#{@config[:nb_rows]},#{hdr_to_sdr_conversion}\" " \
+    "-frames 1 -q:v 2 -an #{output_path.first}/mosaic_#{start_time}.jpeg"
+  end
+
+  def hdr_to_sdr_conversion
+    return '' unless @media_info.hdr_format_compatibility
+
+    "zscale=transferin=smpte2084:" \
+    "#{matrix_in_config}primariesin=bt2020:rangein=limited:" \
+    "transfer=linear:npl=100,format=gbrpf32le,zscale=primaries=bt709," \
+    "tonemap=tonemap=hable:desat=0,zscale=transfer=bt709:matrix=bt709:" \
+    "range=limited,format=yuv420p"
+  end
+
+  def matrix_in_config
+    return '' unless @media_info.matrix_coefficients
+
+    'matrixin=bt2020nc:'
   end
 end
