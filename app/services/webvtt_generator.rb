@@ -57,9 +57,9 @@ class WebvttGenerator
   end
 
   def seconds_to_timecode(seconds)
-    [(seconds / 3600).floor, (seconds / 60 % 60).floor, (seconds % 60).floor].map do |t|
+    [(seconds / 3600).floor, (seconds / 60 % 60).floor, seconds % 60].map do |t|
       t.to_s.rjust(2, '0')
-    end.join(':') +("%.3f" % (seconds-seconds.to_i))
+    end.join(':').concat(("%.3f" % (seconds-seconds.to_i))[1..-1])
   end
 
   def write_text(value, path, opts = '')
