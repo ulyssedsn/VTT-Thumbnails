@@ -8,8 +8,8 @@ class Thumbnails
   end
 
   def call
-    mosaics_folder, video_mediainfo = Ffmpeg.new(video_path).call
-    WebvttGenerator.new(mosaics_folder, video_mediainfo).call
+    mosaics_folder, video_mediainfo, file_duration, frame_interval_duration = Ffmpeg.new(video_path).call
+    WebvttGenerator.new(mosaics_folder, video_mediainfo, file_duration, frame_interval_duration).call
     "THUMBNAIL WEBVTT Generated in #{mosaics_folder}"
   rescue => e
     raise e
