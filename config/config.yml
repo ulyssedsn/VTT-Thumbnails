@@ -3,8 +3,8 @@ common: &common
   image_per_sec: 10
   nb_rows: 6
   nb_columns: 8
-  scale_width: 320
-  scale_height: 180
+  scale_width: 370
+  quality: 2
 
 development:
   <<: *common
